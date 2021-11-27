@@ -3,6 +3,7 @@ import './App.css';
 import Button from '@mui/material/Button'
 import { TextField } from '@mui/material';
 import {useState} from 'react';
+import userHandler from "../src/handler/user"
 function App() {
   
   const [useName, setuserName] = useState("hello");
@@ -10,25 +11,10 @@ function App() {
   const [userId, setUserId] = useState("");
   const [userPw, setUserPw] = useState("");
   const onClickUserRegist = async () =>{
-    alert("name : "+useName+"\n"
-        +"Id:"+ userId+ "\n"
-        +"desc:"+ userDesc+ "\n" 
-    )
-    try{
-      var data = await fetch('http://localhost:4000/user', {
-        method: 'post',
-        headers:{
-          'content-type' : 'application/json'
-        },
-        body: JSON.stringify({
-          "user_nm": useName,
-          "user_desc": userDesc,
-          "user_login_id": userId,
-          "user_login_pw": userPw
-        })
-      })
-    }catch(e){
-      console.log('오류발생: $(e)')
+    if(await userHandler.create({useName, userDesc, userId, userPw})){
+      alert("회원가입 성공")
+    }else{
+      alert("회원가입 실패")
     }
   }
 
